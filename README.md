@@ -1,3 +1,3 @@
 # randomHeapStuff
 
-Leave comments and suggestions!
+Leave comments, suggestions, ideas!
