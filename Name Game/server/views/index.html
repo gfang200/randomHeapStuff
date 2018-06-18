@@ -1,0 +1,404 @@
+{% extends 'layouts/application.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+  <!-- My code is bad  -->
+
+  <div class="container" style="max-width: 400px;">
+    <h2>Welcome!</h2>
+    <form accept-charset="UTF-8" action="/" method="GET" role="form">
+      <div class="form-group">
+        <label for="name">By submitting your name below, you agree to be attributed at the user level. Your scores will be visible on Heap!! <br/><br/> WARNING: Attribution is retroactive ;)</label>
+        <input class="form-control" id="name" name="name" type="text" value="{{form.name}}">
+        <button onclick='identify()' >I Agree</button>
+
+        <script>
+            function identify(){
+              identity = document.getElementById('name').value
+              heap.identify(identity, 'name')
+
+            }
+            </script>
+        
+      
+      </div>
+    </form>
+    <hr>
+
+    <h2>Heap name game</h2>
+    <img id='gameImage' src = ''></img>
+
+    <form id='game' accept-charset="UTF-8" action="/" method="GET" role="form" autocomplete="off">
+      <div class="form-group">
+        What's my first name?:
+        <input class="form-control" id="first_name" name="first_name" type="text" value="{{form.first_name}}" autocomplete="false" autofocus>
+        <input class="form-control" id="answer" name="answer" value = '' type="hidden">
+        <input class="form-control" id="score" name="score" value='' type = "hidden">
+        <input class="form-control" id="full_name" name="full_name" value='' type = "hidden">
+
+
+        <button id = 'submit_game' style= 'background-color:black; color:black; width: 100px' onclick= 'scoreAnswer()' ></button> <- Click to submit
+
+        <script>
+          function scoreAnswer(){
+            if (document.getElementById('first_name').value == document.getElementById('submit_game').innerHTML){
+              document.getElementById('score').value='Correct'
+              score = 'Correct'
+              } else {
+              document.getElementById('score').value='Incorrect'
+              score = 'Incorrect'
+              }
+        heap.track('score_prod', {'score':score, 'guess':document.getElementById('first_name').value, 'answer':document.getElementById('submit_game').innerHTML, 'full_name': document.getElementById('full_name').value} )
+        $('#game').submit();
+          }
+          </script>
+
+      </div>
+    </form>
+
+    <div id = 'results'></div>
+    <script>
+
+      //todo refactor this out
+      json_data = {
+   "Scott Sigman":{
+      "first_name":"Scott",
+      "last_name":"Sigman",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_scott.jpg"
+   },
+   "Joey Backs":{
+      "first_name":"Joey",
+      "last_name":"Backs",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_joey.jpg"
+   },
+   "Devin Blase":{
+      "first_name":"Devin",
+      "last_name":"Blase",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_devin.jpg"
+   },
+   "Carlo Candela":{
+      "first_name":"Carlo",
+      "last_name":"Candela",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_carlo.jpg"
+   },
+   "Gediminas Rapolavicius":{
+      "first_name":"Gediminas",
+      "last_name":"Rapolavicius",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_gediminas.jpg"
+   },
+   "Cassandra Roulund":{
+      "first_name":"Cassandra",
+      "last_name":"Roulund",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2018/02/unnamed.jpg"
+   },
+   "Mike Magee":{
+      "first_name":"Mike",
+      "last_name":"Magee",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_mike.jpg"
+   },
+   "Geoff Anderson":{
+      "first_name":"Geoff",
+      "last_name":"Anderson",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_geoff.jpg"
+   },
+   "Dan Robinson":{
+      "first_name":"Dan",
+      "last_name":"Robinson",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_dan.jpg"
+   },
+   "Michael Malis":{
+      "first_name":"Michael",
+      "last_name":"Malis",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_michael.jpg"
+   },
+   "Melanie Oberto":{
+      "first_name":"Melanie",
+      "last_name":"Oberto",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_melanie.jpg"
+   },
+   "John Najac":{
+      "first_name":"John",
+      "last_name":"Najac",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_najac.jpg"
+   },
+   "Kevin Richards":{
+      "first_name":"Kevin",
+      "last_name":"Richards",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_kevin.jpg"
+   },
+   "Diana Trump":{
+      "first_name":"Diana",
+      "last_name":"Trump",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_diana.jpg"
+   },
+   "Abhi Puranam":{
+      "first_name":"Abhi",
+      "last_name":"Puranam",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_abhi.jpg"
+   },
+   "Ada Del Rosso":{
+      "first_name":"Ada",
+      "last_name":"Rosso",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_ada.jpg"
+   },
+   "Zack Skelly":{
+      "first_name":"Zack",
+      "last_name":"Skelly",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_zack.jpg"
+   },
+   "Neil Griffey":{
+      "first_name":"Neil",
+      "last_name":"Griffey",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_neil.jpg"
+   },
+   "Veronica Dasovich":{
+      "first_name":"Veronica",
+      "last_name":"Dasovich",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_veronica.jpg"
+   },
+   "Zac Fuld":{
+      "first_name":"Zac",
+      "last_name":"Fuld",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_zac.jpg"
+   },
+   "Kamal Marhubi":{
+      "first_name":"Kamal",
+      "last_name":"Marhubi",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_kamal.jpg"
+   },
+   "Michael Handley":{
+      "first_name":"Michael",
+      "last_name":"Handley",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_handley.jpg"
+   },
+   "Thomas Foley":{
+      "first_name":"Thomas",
+      "last_name":"Foley",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_thomas.jpg"
+   },
+   "Bill Zogorski":{
+      "first_name":"Bill",
+      "last_name":"Zogorski",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_bill.jpg"
+   },
+   "Todd Busler":{
+      "first_name":"Todd",
+      "last_name":"Busler",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_todd.jpg"
+   },
+   "Dan Li":{
+      "first_name":"Dan",
+      "last_name":"Li",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_dianwen.jpg"
+   },
+   "Michelle Sepanski":{
+      "first_name":"Michelle",
+      "last_name":"Sepanski",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_michelle.jpg"
+   },
+   "Matt Roe":{
+      "first_name":"Matt",
+      "last_name":"Roe",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_matt.jpg"
+   },
+   "Sabina Mehra":{
+      "first_name":"Sabina",
+      "last_name":"Mehra",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_sabina.jpg"
+   },
+   "Casey Knapp":{
+      "first_name":"Casey",
+      "last_name":"Knapp",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_casey.jpg"
+   },
+   "James Katz":{
+      "first_name":"James",
+      "last_name":"Katz",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_james.jpg"
+   },
+   "Anojh Gnanachandran":{
+      "first_name":"Anojh",
+      "last_name":"Gnanachandran",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_anojh.jpg"
+   },
+   "Erik Nguyen":{
+      "first_name":"Erik",
+      "last_name":"Nguyen",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_erik.jpg"
+   },
+   "Ravi Parikh":{
+      "first_name":"Ravi",
+      "last_name":"Parikh",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_ravi.jpg"
+   },
+   "Will Wedell":{
+      "first_name":"Will",
+      "last_name":"Wedell",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_will.jpg"
+   },
+   "Victoria Sian":{
+      "first_name":"Victoria",
+      "last_name":"Sian",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_victoria.jpg"
+   },
+   "Jesse Shikiar":{
+      "first_name":"Jesse",
+      "last_name":"Shikiar",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_jesse.jpg"
+   },
+   "Suchita Donti":{
+      "first_name":"Suchita",
+      "last_name":"Donti",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2018/02/AAEAAQAAAAAAAAl5AAAAJDU3YjY5NzA4LWY1ZGYtNGMxNS04ZWUyLTM3NTg0NzI5ZDEwZQ.jpg"
+   },
+   "Austin Whittier":{
+      "first_name":"Austin",
+      "last_name":"Whittier",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_austin.jpg"
+   },
+   "John Krauss":{
+      "first_name":"John",
+      "last_name":"Krauss",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_talos.jpg"
+   },
+   "Dorian Johnson":{
+      "first_name":"Dorian",
+      "last_name":"Johnson",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_dorian.jpg"
+   },
+   "Alex Frieder":{
+      "first_name":"Alex",
+      "last_name":"Frieder",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_alex.jpg"
+   },
+   "Becca Lindquist":{
+      "first_name":"Becca",
+      "last_name":"Lindquist",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_becca.jpg"
+   },
+   "Shea Brucker":{
+      "first_name":"Shea",
+      "last_name":"Brucker",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_shea.jpg"
+   },
+   "Michael Schneider":{
+      "first_name":"Michael",
+      "last_name":"Schneider",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_michael_s.jpg"
+   },
+   "Jonathan Archer":{
+      "first_name":"Jonathan",
+      "last_name":"Archer",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_jonathan.jpg"
+   },
+   "Taylor Udell":{
+      "first_name":"Taylor",
+      "last_name":"Udell",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_taylor.jpg"
+   },
+   "Enoch Cheung":{
+      "first_name":"Enoch",
+      "last_name":"Cheung",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_enoch.jpg"
+   },
+   "Timothy Andrew":{
+      "first_name":"Timothy",
+      "last_name":"Andrew",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_tim.jpg"
+   },
+   "John Clover":{
+      "first_name":"John",
+      "last_name":"Clover",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_john.jpg"
+   },
+   "Matin Movassate":{
+      "first_name":"Matin",
+      "last_name":"Movassate",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_matin.jpg"
+   },
+   "Jerry van Leeuwen":{
+      "first_name":"Jerry",
+      "last_name":"Leeuwen",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_jerry.jpg"
+   },
+   "Allison Cougan":{
+      "first_name":"Allison",
+      "last_name":"Cougan",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_allison.png"
+   },
+   "Ivan Vergiliev":{
+      "first_name":"Ivan",
+      "last_name":"Vergiliev",
+      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_ivan.jpg"
+   }
+};
+
+      console.log(json_data);
+
+
+      var getQueryString = function ( field, url ) {
+        var href = url ? url : window.location.href;
+        var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+        var string = reg.exec(href);
+        return string ? string[1] : null;
+      };
+
+      console.log(getQueryString('first_name'))
+
+      if (getQueryString('first_name') != null){
+        if (getQueryString('first_name') == getQueryString('answer')){
+          document.getElementById('results').innerHTML='<h3>Correct!!</h3>'
+        } else {
+          document.getElementById('results').innerHTML='<h3>Inorrect!!</h3>'
+        }
+        document.getElementById('results').innerHTML+= '<br/><b>You said:</b> ' +getQueryString('first_name')
+        document.getElementById('results').innerHTML+= '<br/><b>Name is:</b> ' + getQueryString('answer')
+
+      }
+
+
+      
+
+      function random_person(json_data) {
+        var keys = [];
+        for(var k in json_data) keys.push(k);
+        console.log(keys)
+        random_person = keys[Math.floor(Math.random()*keys.length)]
+
+        console.log(random_person)
+
+        return json_data[random_person]
+      };
+
+      //random_person(json_data)
+
+      function update_game(random_person){
+        document.getElementById('gameImage').src=random_person.image_url
+        document.getElementById('submit_game').innerHTML=random_person.first_name
+        document.getElementById('answer').value=random_person.first_name 
+        document.getElementById('full_name').value = random_person.first_name +" " +random_person.last_name
+      }
+
+      update_game(random_person(json_data))
+
+    </script>
+    <script src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js" ></script>
+
+    <h2>Leaderboard</h2>
+    . . .Coming soon? <img src = 'http://i0.kym-cdn.com/entries/icons/original/000/000/091/TrollFace.jpg' style="width:20%">
+    <hr/>
+    Game is powered by:
+    <a href="https://heapanalytics.com/?utm_source=badge" rel="nofollow"><img style="width:108px;height:41px" src="//heapanalytics.com/img/badge.png" alt="Heap | Mobile and Web Analytics" /></a>
+    <br>
+    Like this game? 
+    <button>click here</button>
+    <br>
+    Interested in how it works? It's <a href = 'https://github.com/gfang200/randomHeapStuff'>open source (repository)</a>
+    <br>
+    <br>
+    vvvvv Game is brought to you by this guy (George Fang) 
+    <img src= 'https://media.licdn.com/dms/image/C5603AQGkjznsh6QTSA/profile-displayphoto-shrink_200_200/0?e=1534377600&v=beta&t=evlA_5Z_Xtag0SOP8w5m9l_QoaJx6zf8dF_gDA1qK_Y' width='25%'/>
+  </div>
+{% endblock %}
