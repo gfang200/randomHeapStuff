@@ -6,13 +6,21 @@
 
   <!-- My code is bad  -->
 
-  <div class="container" style="max-width: 400px;">
-    <h2>Welcome!</h2>
+  <div class="container" style="max-width: 550px;">
+    <div><img src = 'https://heapanalytics.com/img/styleguide/Heap%20Logo@2x.png' width = '100%'></div>
+    <h2>Welcome to the Heap name game!</h2>
+    <h4>Want to see scores? : Check Heap ID <b>149580870</b></h4>
+
     <form accept-charset="UTF-8" action="/" method="GET" role="form">
       <div class="form-group">
-        <label for="name">By submitting your name below, you agree to be attributed at the user level. Your scores will be visible on Heap!! <br/><br/> WARNING: Attribution is retroactive ;)</label>
-        <input class="form-control" id="name" name="name" type="text" value="{{form.name}}">
-        <button onclick='identify()' >I Agree</button>
+        <br/>
+        <label for="name">By submitting your name below, you agree to be attributed at the user level.</label>
+        <br/>
+        <input class="form-control" id="name" name="name" type="text" placeholder = "Enter name to be attributed">
+        <br/>
+        <button class='btn btn-success' onclick='identify()' >Heap.Identify me!</button>
+        <br/>
+        <label for="name">WARNING: Attribution is retroactive ;) </label>
 
         <script>
             function identify(){
@@ -27,21 +35,61 @@
     </form>
     <hr>
 
-    <h2>Heap name game</h2>
+    <h3 style="font-weight: bold">Do you know me?</h3>
     <img id='gameImage' src = ''></img>
 
     <form id='game' accept-charset="UTF-8" action="/" method="GET" role="form" autocomplete="off">
       <div class="form-group">
         What's my first name?:
-        <input class="form-control" id="first_name" name="first_name" type="text" value="{{form.first_name}}" autocomplete="false" autofocus>
+        <input class="form-control" id="first_name" name="first_name" type="text" value="{{form.first_name}}" autocomplete="off" autofocus>
         <input class="form-control" id="answer" name="answer" value = '' type="hidden">
         <input class="form-control" id="score" name="score" value='' type = "hidden">
         <input class="form-control" id="full_name" name="full_name" value='' type = "hidden">
 
 
-        <button id = 'submit_game' style= 'background-color:black; color:black; width: 100px' onclick= 'scoreAnswer()' ></button> <- Click to submit
+        <button id = 'submit_game' style= 'background-color:black; color:black; width: 100px' onclick= 'scoreAnswer()' ></button> <- Click to submit (Or hit enter)
+        <hr/>
+        <h3 style="font-weight: bold">Last round results:</h3>
+        <div id = 'results'></div>
+        <hr/>
+        <h3 style="font-weight: bold">Hints and stuff</h3>
+        <h3>Job hints</h3>
+
+        <div class='btn btn-warning' id = 'hints' onclick = 'showHints()'>Show hints</div>
+        <br/>
+        <div >Location: <input class="form-control"  id = 'location' size = '30' style='background-color:white;color:white' readonly></div>
+        <div>Department: <input class="form-control"  id = 'department' size = '30' style='background-color:white;color:white' readonly></div>
+        <div>Role: <input class="form-control"  id = 'role' size = '30' style='background-color:white;color:white' readonly></div>
+
+        <br/>
+        <br/>
+        <h3>Lifeline</h3>
+
+        <div class='btn btn-warning' id = 'hints' onclick = 'showLifeline()'>Show Lifeline</div>
+        <br/>
+        <div>L1: <input class="form-control"  id = 'L1' size = '30' style='background-color:white;color:white' readonly></div>
+        <div>L2: <input class="form-control"  id = 'L2' size = '30' style='background-color:white;color:white' readonly></div>
+        <div>L3: <input class="form-control"  id = 'L3' size = '30' style='background-color:white;color:white' readonly></div>
+        <div>L4: <input class="form-control"  id = 'L4' size = '30' style='background-color:white;color:white' readonly></div>
+        
 
         <script>
+
+
+          function showHints(){
+            document.getElementById('location').removeAttribute('style');
+            document.getElementById('department').removeAttribute('style');
+            document.getElementById('role').removeAttribute('style');
+          }
+
+
+          function showLifeline(){
+            document.getElementById('L1').removeAttribute('style');
+            document.getElementById('L2').removeAttribute('style');
+            document.getElementById('L3').removeAttribute('style');
+            document.getElementById('L4').removeAttribute('style');
+          }
+
           function scoreAnswer(){
             if (document.getElementById('first_name').value == document.getElementById('submit_game').innerHTML){
               document.getElementById('score').value='Correct'
@@ -50,7 +98,7 @@
               document.getElementById('score').value='Incorrect'
               score = 'Incorrect'
               }
-        heap.track('score_prod', {'score':score, 'guess':document.getElementById('first_name').value, 'answer':document.getElementById('submit_game').innerHTML, 'full_name': document.getElementById('full_name').value} )
+        heap.track('score_prod', {'score':score, 'guess':document.getElementById('first_name').value, 'answer':document.getElementById('submit_game').innerHTML, 'full_name': document.getElementById('full_name').value,'location':document.getElementById('location').value,'department':document.getElementById('department').value,'role':document.getElementById('role').value} )
         $('#game').submit();
           }
           </script>
@@ -58,282 +106,12 @@
       </div>
     </form>
 
-    <div id = 'results'></div>
+
     <script>
 
       //todo refactor this out
-      json_data = {
-   "Scott Sigman":{
-      "first_name":"Scott",
-      "last_name":"Sigman",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_scott.jpg"
-   },
-   "Joey Backs":{
-      "first_name":"Joey",
-      "last_name":"Backs",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_joey.jpg"
-   },
-   "Devin Blase":{
-      "first_name":"Devin",
-      "last_name":"Blase",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_devin.jpg"
-   },
-   "Carlo Candela":{
-      "first_name":"Carlo",
-      "last_name":"Candela",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_carlo.jpg"
-   },
-   "Gediminas Rapolavicius":{
-      "first_name":"Gediminas",
-      "last_name":"Rapolavicius",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_gediminas.jpg"
-   },
-   "Cassandra Roulund":{
-      "first_name":"Cassandra",
-      "last_name":"Roulund",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2018/02/unnamed.jpg"
-   },
-   "Mike Magee":{
-      "first_name":"Mike",
-      "last_name":"Magee",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_mike.jpg"
-   },
-   "Geoff Anderson":{
-      "first_name":"Geoff",
-      "last_name":"Anderson",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_geoff.jpg"
-   },
-   "Dan Robinson":{
-      "first_name":"Dan",
-      "last_name":"Robinson",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_dan.jpg"
-   },
-   "Michael Malis":{
-      "first_name":"Michael",
-      "last_name":"Malis",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_michael.jpg"
-   },
-   "Melanie Oberto":{
-      "first_name":"Melanie",
-      "last_name":"Oberto",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_melanie.jpg"
-   },
-   "John Najac":{
-      "first_name":"John",
-      "last_name":"Najac",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_najac.jpg"
-   },
-   "Kevin Richards":{
-      "first_name":"Kevin",
-      "last_name":"Richards",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_kevin.jpg"
-   },
-   "Diana Trump":{
-      "first_name":"Diana",
-      "last_name":"Trump",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_diana.jpg"
-   },
-   "Abhi Puranam":{
-      "first_name":"Abhi",
-      "last_name":"Puranam",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_abhi.jpg"
-   },
-   "Ada Del Rosso":{
-      "first_name":"Ada",
-      "last_name":"Rosso",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_ada.jpg"
-   },
-   "Zack Skelly":{
-      "first_name":"Zack",
-      "last_name":"Skelly",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_zack.jpg"
-   },
-   "Neil Griffey":{
-      "first_name":"Neil",
-      "last_name":"Griffey",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_neil.jpg"
-   },
-   "Veronica Dasovich":{
-      "first_name":"Veronica",
-      "last_name":"Dasovich",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_veronica.jpg"
-   },
-   "Zac Fuld":{
-      "first_name":"Zac",
-      "last_name":"Fuld",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_zac.jpg"
-   },
-   "Kamal Marhubi":{
-      "first_name":"Kamal",
-      "last_name":"Marhubi",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_kamal.jpg"
-   },
-   "Michael Handley":{
-      "first_name":"Michael",
-      "last_name":"Handley",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_handley.jpg"
-   },
-   "Thomas Foley":{
-      "first_name":"Thomas",
-      "last_name":"Foley",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_thomas.jpg"
-   },
-   "Bill Zogorski":{
-      "first_name":"Bill",
-      "last_name":"Zogorski",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_bill.jpg"
-   },
-   "Todd Busler":{
-      "first_name":"Todd",
-      "last_name":"Busler",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_todd.jpg"
-   },
-   "Dan Li":{
-      "first_name":"Dan",
-      "last_name":"Li",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_dianwen.jpg"
-   },
-   "Michelle Sepanski":{
-      "first_name":"Michelle",
-      "last_name":"Sepanski",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_michelle.jpg"
-   },
-   "Matt Roe":{
-      "first_name":"Matt",
-      "last_name":"Roe",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_matt.jpg"
-   },
-   "Sabina Mehra":{
-      "first_name":"Sabina",
-      "last_name":"Mehra",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_sabina.jpg"
-   },
-   "Casey Knapp":{
-      "first_name":"Casey",
-      "last_name":"Knapp",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_casey.jpg"
-   },
-   "James Katz":{
-      "first_name":"James",
-      "last_name":"Katz",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_james.jpg"
-   },
-   "Anojh Gnanachandran":{
-      "first_name":"Anojh",
-      "last_name":"Gnanachandran",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_anojh.jpg"
-   },
-   "Erik Nguyen":{
-      "first_name":"Erik",
-      "last_name":"Nguyen",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_erik.jpg"
-   },
-   "Ravi Parikh":{
-      "first_name":"Ravi",
-      "last_name":"Parikh",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_ravi.jpg"
-   },
-   "Will Wedell":{
-      "first_name":"Will",
-      "last_name":"Wedell",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_will.jpg"
-   },
-   "Victoria Sian":{
-      "first_name":"Victoria",
-      "last_name":"Sian",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_victoria.jpg"
-   },
-   "Jesse Shikiar":{
-      "first_name":"Jesse",
-      "last_name":"Shikiar",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_jesse.jpg"
-   },
-   "Suchita Donti":{
-      "first_name":"Suchita",
-      "last_name":"Donti",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2018/02/AAEAAQAAAAAAAAl5AAAAJDU3YjY5NzA4LWY1ZGYtNGMxNS04ZWUyLTM3NTg0NzI5ZDEwZQ.jpg"
-   },
-   "Austin Whittier":{
-      "first_name":"Austin",
-      "last_name":"Whittier",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_austin.jpg"
-   },
-   "John Krauss":{
-      "first_name":"John",
-      "last_name":"Krauss",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_talos.jpg"
-   },
-   "Dorian Johnson":{
-      "first_name":"Dorian",
-      "last_name":"Johnson",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_dorian.jpg"
-   },
-   "Alex Frieder":{
-      "first_name":"Alex",
-      "last_name":"Frieder",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_alex.jpg"
-   },
-   "Becca Lindquist":{
-      "first_name":"Becca",
-      "last_name":"Lindquist",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_becca.jpg"
-   },
-   "Shea Brucker":{
-      "first_name":"Shea",
-      "last_name":"Brucker",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_shea.jpg"
-   },
-   "Michael Schneider":{
-      "first_name":"Michael",
-      "last_name":"Schneider",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_michael_s.jpg"
-   },
-   "Jonathan Archer":{
-      "first_name":"Jonathan",
-      "last_name":"Archer",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_jonathan.jpg"
-   },
-   "Taylor Udell":{
-      "first_name":"Taylor",
-      "last_name":"Udell",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_taylor.jpg"
-   },
-   "Enoch Cheung":{
-      "first_name":"Enoch",
-      "last_name":"Cheung",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_enoch.jpg"
-   },
-   "Timothy Andrew":{
-      "first_name":"Timothy",
-      "last_name":"Andrew",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_tim.jpg"
-   },
-   "John Clover":{
-      "first_name":"John",
-      "last_name":"Clover",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_john.jpg"
-   },
-   "Matin Movassate":{
-      "first_name":"Matin",
-      "last_name":"Movassate",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_matin.jpg"
-   },
-   "Jerry van Leeuwen":{
-      "first_name":"Jerry",
-      "last_name":"Leeuwen",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_jerry.jpg"
-   },
-   "Allison Cougan":{
-      "first_name":"Allison",
-      "last_name":"Cougan",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_allison.png"
-   },
-   "Ivan Vergiliev":{
-      "first_name":"Ivan",
-      "last_name":"Vergiliev",
-      "image_url":"https://heapanalytics.com/wp-content/uploads/2017/11/about_ivan.jpg"
-   }
-};
+      json_data = {"Shea Brucker": {"first_name": "Shea", "last_name": "Brucker", "job": "Enterprise Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/12-0-4.jpg", "location": "New York, NY", "department": "Sales"}, "Kevin Moyer": {"first_name": "Kevin", "last_name": "Moyer", "job": "Sales Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/105-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Kevin Richards": {"first_name": "Kevin", "last_name": "Richards", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/77-0-4.jpg", "location": "Remote UT ", "department": "Engineering"}, "Alex Mills": {"first_name": "Alex", "last_name": "Mills", "job": "Account Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/86-0-4.jpg", "location": "San Francisco, CA", "department": "Account Management"}, "Neil Griffey": {"first_name": "Neil", "last_name": "Griffey", "job": "Business Development Representative", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/41-0-4.jpg", "location": "San Francisco, CA", "department": "Sales Development"}, "Chrix Finne": {"first_name": "Chrix", "last_name": "Finne", "job": "VP Product", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/130-0-4.jpg", "location": "San Francisco, CA", "department": "Product"}, "Yogi Pillay": {"first_name": "Yogi", "last_name": "Pillay", "job": "Senior Sales Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/80-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Dave Feldman": {"first_name": "Dave", "last_name": "Feldman", "job": "VP Design", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/132-0-4.jpg", "location": "San Francisco, CA", "department": "Product"}, "Janice Wong": {"first_name": "Janice", "last_name": "Wong", "job": "Recruiting Coordinator", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/100-0-4.jpg", "location": "San Francisco, CA", "department": "Recruiting"}, "Spencer Vargo": {"first_name": "Spencer", "last_name": "Vargo", "job": "Business Development Representative", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/120-1-4.jpg", "location": "SLC, UT", "department": "Sales Development"}, "Sabina Mehra": {"first_name": "Sabina", "last_name": "Mehra", "job": "Director of Customer Engagment", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/62-0-4.jpg", "location": "San Francisco, CA", "department": "Marketing"}, "Dianwen Li": {"first_name": "Dianwen", "last_name": "Li", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/44-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Ravi Parikh": {"first_name": "Ravi", "last_name": "Parikh", "job": "Founder", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/27-0-4.jpg", "location": "San Francisco, CA", "department": "Operations & Finance"}, "Carl Candela": {"first_name": "Carl", "last_name": "Candela", "job": "Corporate Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/14-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Brian Tecklenburg": {"first_name": "Brian", "last_name": "Tecklenburg", "job": "Director of Sales Enablement", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/73-0-4.jpg", "location": "San Francisco, CA", "department": "Marketing"}, "John Krauss": {"first_name": "John", "last_name": "Krauss", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/61-0-4.jpg", "location": "Remote NY", "department": "Engineering"}, "Michael Schneider": {"first_name": "Michael", "last_name": "Schneider", "job": "Senior Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/96-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Devin Blase MacGriff": {"first_name": "Devin", "last_name": "MacGriff", "job": "Vice President of People", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/68-0-4.jpg", "location": "San Francisco, CA", "department": "Operations & Finance"}, "Scott Sigman": {"first_name": "Scott", "last_name": "Sigman", "job": "Account Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/32-0-4.jpg", "location": "San Francisco, CA", "department": "Account Management"}, "Youyou Li": {"first_name": "Youyou", "last_name": "Li", "job": "Solutions Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/126-0-4.jpg", "location": "San Francisco, CA", "department": "Solutions"}, "Michael Magee": {"first_name": "Michael", "last_name": "Magee", "job": "Enterprise Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/21-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Geoff Anderson": {"first_name": "Geoff", "last_name": "Anderson", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/59-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Mitchell Haller": {"first_name": "Mitchell", "last_name": "Haller", "job": "Business Development Representative", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/125-0-4.jpg", "location": "SLC, UT", "department": "Sales Development"}, "Michael Malis": {"first_name": "Michael", "last_name": "Malis", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/23-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Modesto Morales": {"first_name": "Modesto", "last_name": "Morales", "job": "Accounting Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/93-3-4.jpg", "location": "San Francisco, CA", "department": "Operations & Finance"}, "Rebecca Lindquist": {"first_name": "Rebecca", "last_name": "Lindquist", "job": "West Coast Director of Enterprise and Corporate Sales", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/20-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Bryce Wells": {"first_name": "Bryce", "last_name": "Wells", "job": "Business Development Representative", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/124-0-4.jpg", "location": "SLC, UT", "department": "Sales Development"}, "Aaron Price": {"first_name": "Aaron", "last_name": "Price", "job": "Business Development Representative", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/121-0-4.jpg", "location": "SLC, UT", "department": "Sales Development"}, "Ada Del Rosso": {"first_name": "Ada", "last_name": "Rosso", "job": "Head of Finance", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/53-0-4.jpg", "location": "San Francisco, CA", "department": "Operations & Finance"}, "Christina Sit": {"first_name": "Christina", "last_name": "Sit", "job": "Office Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/139-0-4.jpg", "location": "San Francisco, CA", "department": "Operations & Finance"}, "Bill Zogorski": {"first_name": "Bill", "last_name": "Zogorski", "job": "Corporate Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/38-0-4.jpg", "location": "New York, NY", "department": "Sales"}, "Todd Busler": {"first_name": "Todd", "last_name": "Busler", "job": "General Manager, East Coast", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/13-0-4.jpg", "location": "New York, NY", "department": "Sales"}, "Kylie Moses": {"first_name": "Kylie", "last_name": "Moses", "job": "People Operations Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/110-0-4.jpg", "location": "San Francisco, CA", "department": "Operations & Finance"}, "Tim Andrew": {"first_name": "Tim", "last_name": "Andrew", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/67-1-4.jpg", "location": "Remote Intl", "department": "Engineering"}, "Victoria Sian": {"first_name": "Victoria", "last_name": "Sian", "job": "Enterprise Recruiter", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/31-1-4.jpg", "location": "San Francisco, CA", "department": "Recruiting"}, "Andy Tsai": {"first_name": "Andy", "last_name": "Tsai", "job": "GTM Lead Recruiter", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/85-0-4.jpg", "location": "San Francisco, CA", "department": "Recruiting"}, "Monica Ortiz": {"first_name": "Monica", "last_name": "Ortiz", "job": "Marketing and Events ", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/135-0-4.jpg", "location": "Remote CA", "department": "Marketing"}, "Enoch Cheung": {"first_name": "Enoch", "last_name": "Cheung", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/15-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Jerry van Leeuwen": {"first_name": "Jerry", "last_name": "Leeuwen", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/78-0-4.jpg", "location": "Remote Intl", "department": "Engineering"}, "Christy Hollingshead": {"first_name": "Christy", "last_name": "Hollingshead", "job": "Director of Training", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/114-0-4.jpg", "location": "San Francisco, CA", "department": "Solutions"}, "Carly Agar": {"first_name": "Carly", "last_name": "Agar", "job": "Account Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/102-5-4.jpg", "location": "New York, NY", "department": "Account Management"}, "Charlie liang": {"first_name": "Charlie", "last_name": "liang", "job": "Head of Demand Gen", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/127-0-4.jpg", "location": "San Francisco, CA", "department": "Marketing"}, "Gediminas Rapolavicius": {"first_name": "Gediminas", "last_name": "Rapolavicius", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/52-0-4.jpg", "location": "Remote Intl", "department": "Engineering"}, "Cassandra Roulund": {"first_name": "Cassandra", "last_name": "Roulund", "job": "GTM Recruiter", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/112-0-4.jpg", "location": "San Francisco, CA", "department": "Recruiting"}, "Dustin Beaudoin": {"first_name": "Dustin", "last_name": "Beaudoin", "job": "Enterprise Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/118-0-4.jpg", "location": "New York, NY", "department": "Sales"}, "George Fang": {"first_name": "George", "last_name": "Fang", "job": "Digital Marketing Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/140-0-4.jpg", "location": "San Francisco, CA", "department": "Marketing"}, "Jake Lohrey": {"first_name": "Jake", "last_name": "Lohrey", "job": "Enterprise Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/81-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Dorian Johnson": {"first_name": "Dorian", "last_name": "Johnson", "job": "Head of Product Engineering", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/19-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Andrew Dai": {"first_name": "Andrew", "last_name": "Dai", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/115-0-4.jpg", "location": "Remote-GA", "department": "Engineering"}, "Shawn Hansen": {"first_name": "Shawn", "last_name": "Hansen", "job": "Chief Marketing Officer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/70-0-4.jpg", "location": "San Francisco, CA", "department": "Marketing"}, "Neal George": {"first_name": "Neal", "last_name": "George", "job": "Chief Revenue Officer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/64-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Veronica Dasovich": {"first_name": "Veronica", "last_name": "Dasovich", "job": "Senior Manager, Account Management ", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/60-1-4.jpg", "location": "San Francisco, CA", "department": "Account Management"}, "Jenny Kim": {"first_name": "Jenny", "last_name": "Kim", "job": "Staff Accountant ", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/136-5-4.jpg", "location": "San Francisco, CA", "department": "Operations & Finance"}, "Michelle Sepanski": {"first_name": "Michelle", "last_name": "Sepanski", "job": "Account Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/83-0-4.jpg", "location": "San Francisco, CA", "department": "Account Management"}, "Matt Roe": {"first_name": "Matt", "last_name": "Roe", "job": "Product Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/29-0-4.jpg", "location": "San Francisco, CA", "department": "Product"}, "Johnny Doe": {"first_name": "Johnny", "last_name": "Doe", "job": "Enterprise Recruiter", "image_url": "https://resources.bamboohr.com/images/photo_male.png", "location": "San Francisco, CA", "department": "Sales Development"}, "James Katz": {"first_name": "James", "last_name": "Katz", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/43-0-4.jpg", "location": "Remote NY", "department": "Engineering"}, "Chase Edmondson": {"first_name": "Chase", "last_name": "Edmondson", "job": "Enterprise Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/108-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Annu Kristipati": {"first_name": "Annu", "last_name": "Kristipati", "job": "Head of Customer Success", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/123-0-4.jpg", "location": "San Francisco, CA", "department": "Solutions"}, "Jake Makler": {"first_name": "Jake", "last_name": "Makler", "job": "Sales Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/113-1-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Josh Dreyfuss": {"first_name": "Josh", "last_name": "Dreyfuss", "job": "Content Marketing Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/141-0-4.jpg", "location": "San Francisco, CA", "department": "Marketing"}, "Marconi Lanna": {"first_name": "Marconi", "last_name": "Lanna", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/146-0-4.jpg", "location": "Remote CA", "department": "Engineering"}, "Natalie Nurnberg": {"first_name": "Natalie", "last_name": "Nurnberg", "job": "Strategic Account Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/131-0-4.jpg", "location": "San Francisco, CA", "department": "Account Management"}, "Daniel Robinson": {"first_name": "Daniel", "last_name": "Robinson", "job": "Chief Technology Officer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/28-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Taylor Udell": {"first_name": "Taylor", "last_name": "Udell", "job": "Marketing Ops", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/35-0-4.jpg", "location": "San Francisco, CA", "department": "Marketing"}, "John Clover": {"first_name": "John", "last_name": "Clover", "job": "Solutions Engineer Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/16-0-4.jpg", "location": "San Francisco, CA", "department": "Solutions"}, "Matin Movassate": {"first_name": "Matin", "last_name": "Movassate", "job": "Chief Executive Officer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/26-0-4.jpg", "location": "San Francisco, CA", "department": "Operations & Finance"}, "Zac Fuld": {"first_name": "Zac", "last_name": "Fuld", "job": "Account Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/79-3-4.jpg", "location": "San Francisco, CA", "department": "Account Management"}, "David Saxon": {"first_name": "David", "last_name": "Saxon", "job": "VP Channels", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/133-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Jonathan Archer": {"first_name": "Jonathan", "last_name": "Archer", "job": "Solutions Architect ", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/10-0-4.jpg", "location": "San Francisco, CA", "department": "Solutions"}, "Steve Fitzsimmons": {"first_name": "Steve", "last_name": "Fitzsimmons", "job": "Product Marketing Manager", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/128-0-4.jpg", "location": "San Francisco, CA", "department": "Marketing"}, "Wheeler Boyd-Boffa": {"first_name": "Wheeler", "last_name": "Boyd-Boffa", "job": "Solutions Architect ", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/137-0-4.jpg", "location": "San Francisco, CA", "department": "Solutions"}, "Nab Sengupta": {"first_name": "Nab", "last_name": "Sengupta", "job": "Business Development Representative", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/138-0-4.jpg", "location": "San Francisco, CA", "department": "Sales Development"}, "John Najac": {"first_name": "John", "last_name": "Najac", "job": "Enterprise Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/76-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Abhi Puranam": {"first_name": "Abhi", "last_name": "Puranam", "job": "Solutions Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/66-0-4.jpg", "location": "San Francisco, CA", "department": "Solutions"}, "Andrew Webb": {"first_name": "Andrew", "last_name": "Webb", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/144-0-4.jpg", "location": "Remote-TX", "department": "Engineering"}, "Kamal Marhubi": {"first_name": "Kamal", "last_name": "Marhubi", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/48-0-4.jpg", "location": "Remote Intl", "department": "Engineering"}, "Michael Handley": {"first_name": "Michael", "last_name": "Handley", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/39-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Alec Ashford": {"first_name": "Alec", "last_name": "Ashford", "job": "Solutions Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/89-0-4.jpg", "location": "San Francisco, CA", "department": "Solutions"}, "Sajad Ghanizada": {"first_name": "Sajad", "last_name": "Ghanizada", "job": "Content Marketer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/134-0-4.jpg", "location": "Remote CA", "department": "Marketing"}, "Alykhan Jina": {"first_name": "Alykhan", "last_name": "Jina", "job": "Sales Development Representative Intern", "image_url": "https://resources.bamboohr.com/images/photo_male.png", "location": "San Francisco, CA", "department": "Sales Development"}, "Joey Backs": {"first_name": "Joey", "last_name": "Backs", "job": "Corporate Account Executive", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/11-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Anojh Gnanachandran": {"first_name": "Anojh", "last_name": "Gnanachandran", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/74-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Will Wedell": {"first_name": "Will", "last_name": "Wedell", "job": "Business Development Representative", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/72-0-4.jpg", "location": "San Francisco, CA", "department": "Sales Development"}, "Han Lee": {"first_name": "Han", "last_name": "Lee", "job": "Head of Infrastructure Engineering", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/122-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Jesse Shikiar": {"first_name": "Jesse", "last_name": "Shikiar", "job": "Sales Development Rep", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/75-0-4.jpg", "location": "San Francisco, CA", "department": "Sales Development"}, "Heath Capps": {"first_name": "Heath", "last_name": "Capps", "job": "BDR Team Manager- Utah Office ", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/119-0-4.jpg", "location": "SLC, UT", "department": "Sales Development"}, "Austin Whittier": {"first_name": "Austin", "last_name": "Whittier", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/37-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Nicholas Erdenberger": {"first_name": "Nicholas", "last_name": "Erdenberger", "job": "Director of Revenue Operations & Analytics", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/95-0-4.jpg", "location": "San Francisco, CA", "department": "Sales"}, "Alex Frieder": {"first_name": "Alex", "last_name": "Frieder", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/40-1-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}, "Eunnice Lee": {"first_name": "Eunnice", "last_name": "Lee", "job": "Business Development Representative", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/104-0-4.jpg", "location": "San Francisco, CA", "department": "Sales Development"}, "Mel Oberto": {"first_name": "Mel", "last_name": "Oberto", "job": "People Operations Associate", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/71-1-4.jpg", "location": "San Francisco, CA", "department": "Operations & Finance"}, "Ivan Vergiliev": {"first_name": "Ivan", "last_name": "Vergiliev", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/47-0-4.jpg", "location": "Remote Intl", "department": "Engineering"}, "Erik Olson": {"first_name": "Erik", "last_name": "Olson", "job": "Business Development Representative", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/90-0-4.jpg", "location": "San Francisco, CA", "department": "Sales Development"}, "Jacob Hansen": {"first_name": "Jacob", "last_name": "Hansen", "job": "Intern", "image_url": "https://resources.bamboohr.com/images/photo_male.png", "location": "", "department": "Trolltown"}, "James Taber": {"first_name": "James", "last_name": "Taber", "job": "Software Engineer", "image_url": "https://bf6f1022b9c73868eb4a-e1075d549e4ef04419a5d0e2713cbbfd.ssl.cf1.rackcdn.com/photos/98-0-4.jpg", "location": "San Francisco, CA", "department": "Engineering"}}
+;
 
       console.log(json_data);
 
@@ -374,14 +152,44 @@
 
       //random_person(json_data)
 
-      function update_game(random_person){
-        document.getElementById('gameImage').src=random_person.image_url
-        document.getElementById('submit_game').innerHTML=random_person.first_name
-        document.getElementById('answer').value=random_person.first_name 
-        document.getElementById('full_name').value = random_person.first_name +" " +random_person.last_name
+      function update_game(L1,L2,L3,L4){
+        document.getElementById('gameImage').src=L1.image_url
+        document.getElementById('submit_game').innerHTML=L1.first_name
+        document.getElementById('answer').value=L1.first_name 
+        document.getElementById('full_name').value = L1.first_name +" " +L1.last_name
+        document.getElementById('location').value=L1.location
+        document.getElementById('department').value=L1.department
+        document.getElementById('role').value=L1.job
+
+        //todo make better
+        function shuffle(a) {
+          var j, x, i;
+          for (i = a.length - 1; i > 0; i--) {
+              j = Math.floor(Math.random() * (i + 1));
+              x = a[i];
+              a[i] = a[j];
+              a[j] = x;
+          }
+          return a;
+        }
+
+        hints = [L1.first_name,L2,L3,L4]
+        hints = shuffle(hints)
+        document.getElementById('L1').value= hints[0]
+        document.getElementById('L2').value= hints[1]
+        document.getElementById('L3').value= hints[2]
+        document.getElementById('L4').value= hints[3]
       }
 
-      update_game(random_person(json_data))
+      //todo
+      var keys_global = [];
+      for(var k in json_data) keys_global.push(k);
+      p1 = random_person(json_data);
+      p2 = json_data[keys_global[Math.floor(Math.random()*keys_global.length)]].first_name;
+      p4 = json_data[keys_global[Math.floor(Math.random()*keys_global.length)]].first_name;
+      p3 = json_data[keys_global[Math.floor(Math.random()*keys_global.length)]].first_name;
+
+      update_game(p1,p2,p3,p4)
 
     </script>
     <script src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js" ></script>
@@ -392,13 +200,19 @@
     Game is powered by:
     <a href="https://heapanalytics.com/?utm_source=badge" rel="nofollow"><img style="width:108px;height:41px" src="//heapanalytics.com/img/badge.png" alt="Heap | Mobile and Web Analytics" /></a>
     <br>
+
     Like this game? 
-    <button>click here</button>
+    <button class='btn btn-danger'>click here</button>
     <br>
-    Interested in how it works? It's <a href = 'https://github.com/gfang200/randomHeapStuff'>open source (repository)</a>
+    Interested in how it works? It's <a href = 'https://github.com/gfang200/randomHeapStuff'>open source</a>. (Prepare for spaghetti) 
     <br>
     <br>
-    vvvvv Game is brought to you by this guy (George Fang) 
-    <img src= 'https://media.licdn.com/dms/image/C5603AQGkjznsh6QTSA/profile-displayphoto-shrink_200_200/0?e=1534377600&v=beta&t=evlA_5Z_Xtag0SOP8w5m9l_QoaJx6zf8dF_gDA1qK_Y' width='25%'/>
+    vvvvv Game is brought to you by this guy vvvvv<br/>
+   
+
+    <script src="//platform.linkedin.com/in.js" type="text/javascript"></script>
+    <script type="IN/MemberProfile" data-id="https://www.linkedin.com/in/fanggeorge" data-format="inline" data-related="false"></script>
+    <!-- <img src= 'https://media.licdn.com/dms/image/C5603AQGkjznsh6QTSA/profile-displayphoto-shrink_200_200/0?e=1534377600&v=beta&t=evlA_5Z_Xtag0SOP8w5m9l_QoaJx6zf8dF_gDA1qK_Y' width='25%'/> -->
+
   </div>
 {% endblock %}
